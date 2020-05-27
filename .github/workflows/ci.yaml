@@ -31,6 +31,16 @@ jobs:
         "${GITHUB_WORKSPACE}/bin/bazel" query //...
     - name: Build
       run: ~/bin/generate_definitions_and_protos.sh //proto/myprofile:myprofile
+    - name: Persist profile json
+        uses: actions/upload-artifact@v1
+        with:
+          name: profile
+          path: proto/myprofile/*json
+    - name: Persist profile protos
+        uses: actions/upload-artifact@v1
+        with:
+          name: profile
+          path: proto/myprofile/*proto
     - name: Test
       run: |
         "${GITHUB_WORKSPACE}/bin/bazel" test //...
