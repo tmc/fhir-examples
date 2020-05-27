@@ -41,6 +41,3 @@ jobs:
         with:
           name: profile
           path: proto/myprofile/*proto
-    - name: Test
-      run: |
-        "${GITHUB_WORKSPACE}/bin/bazel" test //...
