@@ -19,12 +19,18 @@ jobs:
         mkdir -p "${GITHUB_WORKSPACE}/bin/"
         mv bazelisk-linux-amd64 "${GITHUB_WORKSPACE}/bin/bazel"
         chmod +x "${GITHUB_WORKSPACE}/bin/bazel"
+    - name: Fetch helpers
+      run: |
+        test -d ~/bin || mkdir -p ~/bin
+        curl https://raw.githubusercontent.com/google/fhir/v0.5.0/bazel/generate_protos_utils.sh > ~/bin/generate_protos_utils.sh     && \
+        curl https://raw.githubusercontent.com/google/fhir/v0.5.0/bazel/generate_protos.sh > ~/bin/generate_protos.sh && \
+        curl https://raw.githubusercontent.com/google/fhir/v0.5.0/bazel/generate_definitions_and_protos.sh > ~/bin/generate_definitions_and_protos.sh && \
+        chmod +x ~/bin/generate_protos.sh && chmod +x ~/bin/generate_definitions_and_protos.sh
     - name: Query
       run: |
         "${GITHUB_WORKSPACE}/bin/bazel" query //...
     - name: Build
-      run: |
-        "${GITHUB_WORKSPACE}/bin/bazel" build //...
+      run: ~/bin/generate_definitions_and_protos.sh //proto/myprofile:myprofile
     - name: Test
       run: |
         "${GITHUB_WORKSPACE}/bin/bazel" test //...
